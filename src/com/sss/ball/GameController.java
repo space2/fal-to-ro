@@ -58,7 +58,6 @@ public class GameController {
 
         // Render a red square
         G.drawImage(mTexRackets, 100, 100, 300, 100, 0, 0, 128/256.0f, 32/256.0f);
-        G.drawImage(mTexRackets, 150, 150, 300, 100, 0, 0, 128/256.0f, 32/256.0f);
 
         // Update the screen
         Display.update();
