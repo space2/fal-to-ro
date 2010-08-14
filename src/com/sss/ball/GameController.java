@@ -11,12 +11,15 @@ public class GameController {
     private static final int PREFERRED_HEIGHT = 768;
     private boolean mRunning;
     private long mLastTick = System.currentTimeMillis();
+    private int mTexBalls;
+    private int mTexRackets;
 
     /**
      * Main application loop.
      */
     public void run() {
         initDisplay();
+        initTextures();
         mRunning = true;
         while (mRunning) {
             // measure last frame time
@@ -34,6 +37,13 @@ public class GameController {
         }
     }
 
+    private void initTextures() {
+        mTexBalls = TextureUtil.loadTexture("/balls.png");
+        mTexRackets = TextureUtil.loadTexture("/rackets.png");
+        System.out.println("mTexBalls=" + mTexBalls);
+        System.out.println("mTexRackets=" + mTexRackets);
+    }
+
     private void handleEvents() {
         // TODO Auto-generated method stub
     }
@@ -47,15 +57,8 @@ public class GameController {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
         // Render a red square
-        GL11.glBegin(GL11.GL_QUADS);
-        {
-            GL11.glColor3f(1.0f, 0.0f, 0.0f);
-            GL11.glVertex2i(100, 100);
-            GL11.glVertex2i(400, 100);
-            GL11.glVertex2i(400, 200);
-            GL11.glVertex2i(100, 200);
-        }
-        GL11.glEnd();
+        G.drawImage(mTexRackets, 100, 100, 300, 100, 0, 0, 128/256.0f, 32/256.0f);
+        G.drawImage(mTexRackets, 150, 150, 300, 100, 0, 0, 128/256.0f, 32/256.0f);
 
         // Update the screen
         Display.update();
@@ -91,6 +94,11 @@ public class GameController {
             GL11.glMatrixMode(GL11.GL_MODELVIEW);
             GL11.glLoadIdentity();
             GL11.glViewport(0, 0, best.getWidth(), best.getHeight());
+            GL11.glEnable(GL11.GL_TEXTURE);
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glEnable(GL11.GL_BLEND);
+            GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GL11.glClearColor(1.0f, 0, 0, 1.0f);
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
