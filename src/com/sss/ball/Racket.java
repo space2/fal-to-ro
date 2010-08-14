@@ -1,5 +1,7 @@
 package com.sss.ball;
 
+import org.lwjgl.input.Mouse;
+
 public class Racket extends Sprite {
 
     private static final float RACKET_HEIGHT = 32;
@@ -51,5 +53,23 @@ public class Racket extends Sprite {
         G.drawImage(tex, x, y, RACKET_UNIT_SIZE, h, 112/256.0f, 0, 16/256.0f, 32/256.0f);
     }
 
+    @Override
+    public void handleEvent() {
+        super.handleEvent();
+
+        // Fetch mouse position
+        float x = Mouse.getX() - GameState.GAME_AREA_X;
+
+        // clamp to valid area
+        float w2 = getWidth() / 2;
+        if (x < w2) {
+            x = w2;
+        } else if (x >= GameState.GAME_AREA_W - w2) {
+            x = GameState.GAME_AREA_W - w2 - 1;
+        }
+
+        // Update position
+        setX(x - w2);
+    }
 
 }
