@@ -1,6 +1,7 @@
 package com.sss.ball;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
@@ -11,15 +12,21 @@ public class GameController {
     private static final int PREFERRED_HEIGHT = 768;
     private boolean mRunning;
     private long mLastTick = System.currentTimeMillis();
-    private int mTexBalls;
-    private int mTexRackets;
+
+    private GameState mGameState = new GameState();
+    private State mState = null;
+    private State mStates[] = {
+            mGameState,
+    };
 
     /**
      * Main application loop.
      */
     public void run() {
         initDisplay();
-        initTextures();
+        initInput();
+        initStates();
+        setState(mGameState);
         mRunning = true;
         while (mRunning) {
             // measure last frame time
@@ -35,32 +42,43 @@ public class GameController {
                 mRunning = false;
             }
         }
+        doneStates();
+        doneDisplay();
+        doneInput();
     }
 
-    private void initTextures() {
-        mTexBalls = TextureUtil.loadTexture("/balls.png");
-        mTexRackets = TextureUtil.loadTexture("/rackets.png");
-        System.out.println("mTexBalls=" + mTexBalls);
-        System.out.println("mTexRackets=" + mTexRackets);
+    private void setState(State newState) {
+        if (newState != null) {
+            newState.onEnter();
+        }
+        mState = newState;
+        if (mState != null) {
+            mState.onExit();
+        }
     }
 
-    private void handleEvents() {
-        // TODO Auto-generated method stub
+    private void initStates() {
+        for (State state : mStates) {
+            state.create();
+        }
     }
 
-    private void tick(int delta) {
-        // TODO Auto-generated method stub
+    private void doneStates() {
+        for (State state : mStates) {
+            state.destroy();
+        }
     }
 
-    private void render() {
-        // Clear the screen
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+    private void initInput() {
+        try {
+            Mouse.create();
+        } catch (LWJGLException e) {
+            e.printStackTrace();
+        }
+    }
 
-        // Render a red square
-        G.drawImage(mTexRackets, 100, 100, 300, 100, 0, 0, 128/256.0f, 32/256.0f);
-
-        // Update the screen
-        Display.update();
+    private void doneInput() {
+        Mouse.destroy();
     }
 
     private void initDisplay() {
@@ -101,7 +119,35 @@ public class GameController {
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
-
     }
+
+    private void doneDisplay() {
+        Display.destroy();
+    }
+
+    private void handleEvents() {
+        if (mState != null) {
+            mState.handleEvents();
+        }
+    }
+
+    private void tick(int delta) {
+        if (mState != null) {
+            mState.tick(delta);
+        }
+    }
+
+    private void render() {
+        // Clear the screen
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
+        if (mState != null) {
+            mState.render();
+        }
+
+        // Update the screen
+        Display.update();
+    }
+
 
 }
