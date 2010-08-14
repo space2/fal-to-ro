@@ -67,9 +67,14 @@ public class Racket extends Sprite {
         } else if (x >= GameState.GAME_AREA_W - w2) {
             x = GameState.GAME_AREA_W - w2 - 1;
         }
+        x -= w2;
 
         // Update position
-        setX(x - w2);
+        float delta = x - getX();
+        if (delta != 0) {
+            setX(x);
+            getGameState().onRacketMoved(delta);
+        }
     }
 
 }

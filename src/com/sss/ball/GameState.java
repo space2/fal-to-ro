@@ -2,6 +2,7 @@ package com.sss.ball;
 
 import java.util.Vector;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class GameState extends State {
@@ -28,9 +29,7 @@ public class GameState extends State {
         mTexBalls = TextureUtil.loadTexture("/balls.png");
         mTexRackets = TextureUtil.loadTexture("/rackets.png");
         mSprites.add(mRacket);
-        Ball ball = new Ball(this);
-        mBalls.add(ball);
-        mSprites.add(ball);
+        addNewBall();
     }
 
     @Override
@@ -46,6 +45,19 @@ public class GameState extends State {
         for (Sprite sprite : mSprites) {
             sprite.handleEvent();
         }
+
+        // Check for mouse click to release the balls
+        if (Mouse.isButtonDown(0)) {
+            // release balls
+            releaseBalls();
+        }
+    }
+
+    private void releaseBalls() {
+        for (Ball ball : mBalls) {
+            ball.fire();
+        }
+
     }
 
     @Override
@@ -78,6 +90,34 @@ public class GameState extends State {
 
     public int getTexRackets() {
         return mTexRackets;
+    }
+
+    public void onRacketMoved(float delta) {
+        for (Ball ball : mBalls) {
+            ball.onRacketMoved(delta);
+        }
+    }
+
+    public Racket getRacket() {
+        return mRacket;
+    }
+
+    public void onBallLost(Ball ball) {
+        // remove ball
+        mBalls.remove(ball);
+        mSprites.remove(ball);
+
+        // if no balls left, add one
+        if (mBalls.size() == 0) {
+            addNewBall();
+        }
+    }
+
+    private void addNewBall() {
+        Ball ball = new Ball(this);
+        mBalls.add(ball);
+        mSprites.add(ball);
+        ball.initPos(mRacket);
     }
 
 }
