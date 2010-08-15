@@ -42,7 +42,9 @@ public class GameState extends State {
         // TODO: clean the scene
 
         // Load new level using level loader
-        mLevelLoader.load(name);
+        if (!mLevelLoader.load(name)) {
+            System.out.println("! Failed to load level: " + name);
+        }
     }
 
     @Override

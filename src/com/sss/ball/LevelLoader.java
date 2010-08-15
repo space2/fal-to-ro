@@ -36,6 +36,19 @@ public class LevelLoader {
         }
         mGameState.setBackground(bg);
 
+        // Fetch and apply the map builder
+        XMLNode builderNode = root.findChild("builder");
+        if (builderNode == null) {
+            System.out.println("! Error in level, <builder> tag mandatory!");
+            return false;
+        }
+        Builder builder = Builder.create(builderNode, mGameState);
+        if (builder == null) {
+            System.out.println("! Error in level, cannot create builder!");
+            return false;
+        }
+        builder.run();
+
         return true;
     }
 

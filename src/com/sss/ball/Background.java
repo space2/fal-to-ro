@@ -4,12 +4,12 @@ import com.sss.ball.xml.XMLNode;
 
 public abstract class Background {
 
-    public static Background create(XMLNode bgNode, GameState mGameState) {
+    public static Background create(XMLNode bgNode, GameState gameState) {
         try {
             String className = "com.sss.ball.bg." + bgNode.getAttr("type");
             Class<?> clazz = Class.forName(className);
             Background bg = (Background) clazz.newInstance();
-            bg.init(bgNode);
+            bg.init(bgNode, gameState);
             return bg;
         } catch (Exception e) {
             e.printStackTrace();
@@ -17,7 +17,7 @@ public abstract class Background {
         }
     }
 
-    abstract protected void init(XMLNode xml);
+    abstract protected void init(XMLNode xml, GameState mGameState);
 
     abstract public void render(float x, float y, float w, float h);
 
