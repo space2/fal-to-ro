@@ -35,8 +35,8 @@ public class GradientBackground extends Background {
         for (int i = 0; i < mColors.size() - 1; i++) {
             ColorItem from = mColors.get(i);
             ColorItem to = mColors.get(i+1);
-            float y0 = h * from.mPos / 100.0f;
-            float y1 = h * to.mPos / 100.0f;
+            float y0 = y + h * from.mPos / 100.0f;
+            float y1 = y + h * to.mPos / 100.0f;
             if (y1 > y0) {
                 G.drawRectVGrad(x, y0, w, y1 - y0, from.mColor, to.mColor);
             }
