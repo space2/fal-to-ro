@@ -30,6 +30,13 @@ public class XMLHandler extends DefaultHandler {
         mCur = node;
     }
 
+    @Override
+    public void characters(char[] ch, int start, int length) throws SAXException {
+        if (mCur == null) return;
+        String text = new String(ch, start, length);
+        mCur.addAttr(new XMLAttr("_text", text));
+    }
+
     public XMLNode getRootNode() {
         return mRoot;
     }

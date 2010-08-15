@@ -47,6 +47,16 @@ public class XMLNode {
         return mChildren.get(idx);
     }
 
+    public XMLNode findChild(String name) {
+        if (name == null) return null;
+        for (XMLNode child : mChildren) {
+            if (name.equals(child.getName())) {
+                return child;
+            }
+        }
+        return null;
+    }
+
     public void addAttr(XMLAttr attr) {
         mAttrs.add(attr);
     }
@@ -57,6 +67,10 @@ public class XMLNode {
 
     public String getAttr(String key) {
         return mAttrs.getValue(key);
+    }
+
+    public String getText() {
+        return getAttr("_text");
     }
 
     public static XMLNode parse(String name) {

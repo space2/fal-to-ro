@@ -19,6 +19,8 @@ public class GameState extends State {
     private Vector<Sprite> mSprites = new Vector<Sprite>();
     private Racket mRacket = new Racket(this);
     private Vector<Ball> mBalls = new Vector<Ball>();
+    private LevelLoader mLevelLoader = new LevelLoader(this);
+    private Background mBg;
 
     protected GameState() {
         super(STATE_GAME);
@@ -29,8 +31,18 @@ public class GameState extends State {
         super.create();
         mTexBalls = TextureUtil.loadTexture("/gfx/balls.png");
         mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
+
+        loadLevel("/packs/def/level01.xml");
+
         mSprites.add(mRacket);
         addNewBall();
+    }
+
+    private void loadLevel(String name) {
+        // TODO: clean the scene
+
+        // Load new level using level loader
+        mLevelLoader.load(name);
     }
 
     @Override
@@ -66,7 +78,11 @@ public class GameState extends State {
         super.render();
 
         // render game area background
-        G.drawRect(GAME_AREA_X, GAME_AREA_Y, GAME_AREA_W, GAME_AREA_H, 0xff000000);
+        if (mBg == null) {
+            G.drawRect(GAME_AREA_X, GAME_AREA_Y, GAME_AREA_W, GAME_AREA_H, 0xff000000);
+        } else {
+            mBg.render(GAME_AREA_X, GAME_AREA_Y, GAME_AREA_W, GAME_AREA_H);
+        }
 
         // render sprites
         GL11.glPushMatrix();
@@ -119,6 +135,10 @@ public class GameState extends State {
         mBalls.add(ball);
         mSprites.add(ball);
         ball.initPos(mRacket);
+    }
+
+    public void setBackground(Background bg) {
+        mBg = bg;
     }
 
 }
