@@ -97,6 +97,21 @@ public class Ball extends Sprite {
             }
         }
 
+        // check collision with bricks
+        final GameState gs = getGameState();
+        for (int i = gs.getBrickCount()-1; i >= 0; i--) {
+            Brick brick = gs.getBrick(i);
+            int collision = CollisionUtil.checkCollisionCircleBox(
+                    nx + BALL_SIZE/2, ny + BALL_SIZE/2, BALL_SIZE/2,
+                    brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
+            if (collision != CollisionUtil.COL_NONE) {
+                // There was some sort of collision
+                // TODO bounce
+                // Remove brick
+                getGameState().onBrickHit(brick);
+            }
+        }
+
         // set new position
         setX(nx);
         setY(ny);

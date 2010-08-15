@@ -1,5 +1,6 @@
 package com.sss.ball;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.lwjgl.input.Mouse;
@@ -20,6 +21,7 @@ public class GameState extends State {
     private int mTexBricks;
     private int mTexRackets;
     private Vector<Sprite> mSprites = new Vector<Sprite>();
+    private Vector<Brick> mBricks = new Vector<Brick>();
     private Racket mRacket = new Racket(this);
     private Vector<Ball> mBalls = new Vector<Ball>();
     private LevelLoader mLevelLoader = new LevelLoader(this);
@@ -103,9 +105,20 @@ public class GameState extends State {
     @Override
     public void tick(int delta) {
         super.tick(delta);
-        for (Sprite sprite : mSprites) {
-            sprite.tick(delta);
+
+        // // This doesn't work, since the tick changes mSprites
+        // for (Sprite sprite : mSprites) {
+        //     sprite.tick(delta);
+        // }
+
+        mRacket.tick(delta);
+        for (Ball ball: mBalls) {
+            ball.tick(delta);
         }
+        for (Brick brick: mBricks) {
+            brick.tick(delta);
+        }
+
     }
 
     public int getTexBalls() {
@@ -158,10 +171,30 @@ public class GameState extends State {
 
     public void addBrick(SimpleBrick brick) {
         addSprite(brick);
+        mBricks.add(brick);
     }
 
     private void addSprite(Sprite sprite) {
         mSprites.add(sprite);
+    }
+
+    public int getBrickCount() {
+        return mBricks.size();
+    }
+
+    public Brick getBrick(int idx) {
+        return mBricks.get(idx);
+    }
+
+    public void onBrickHit(Brick brick) {
+        if (brick.onHit()) {
+            removeBrick(brick);
+        }
+    }
+
+    private void removeBrick(Brick brick) {
+        mBricks.remove(brick);
+        mSprites.remove(brick);
     }
 
 }

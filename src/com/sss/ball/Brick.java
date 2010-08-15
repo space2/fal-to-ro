@@ -1,9 +1,14 @@
 package com.sss.ball;
 
-public class Brick extends Sprite {
+public abstract class Brick extends Sprite {
 
     protected Brick(int type, GameState gameState) {
         super(type, gameState);
+    }
+
+    public boolean onHit() {
+        // by default one hit is enough to remove it
+        return true;
     }
 
 }
