@@ -3,12 +3,13 @@ package com.sss.ball.xml;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-public class XMLNode {
+public class XMLNode implements Iterable<XMLNode> {
 
     private Vector<XMLNode> mChildren = new Vector<XMLNode>();
     private XMLNode mParent = null;
@@ -102,6 +103,10 @@ public class XMLNode {
         }
 
         return null;
+    }
+
+    public Iterator<XMLNode> iterator() {
+        return new XMLIterator(this);
     }
 
 }

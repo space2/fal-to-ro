@@ -5,19 +5,17 @@
 	<background type="ColorBackground" color="#804000"/>
 	<builder type="SimpleBrickBuilder" brickWidth="64" brickHeight="32">
 		<mapping char="." type="0"/>
-        <mapping char="X" type="1"/>
-		<data>
-			<row bricks="............"/>
-            <row bricks=".XXXX..XXXX."/>
-            <row bricks=".XXXX..XXXX."/>
-            <row bricks=".XXXX..XXXX."/>
-            <row bricks=".XXXX..XXXX."/>
-            <row bricks="............"/>
-            <row bricks="............"/>
-            <row bricks=".XXXX..XXXX."/>
-            <row bricks=".XXXX..XXXX."/>
-            <row bricks=".XXXX..XXXX."/>
-            <row bricks=".XXXX..XXXX."/>
-		</data>
+		<mapping char="X" type="1"/>
+		<row bricks="............"/>
+		<row bricks=".XXXX..XXXX."/>
+		<row bricks=".XXXX..XXXX."/>
+		<row bricks=".XXXX..XXXX."/>
+		<row bricks=".XXXX..XXXX."/>
+		<row bricks="............"/>
+		<row bricks="............"/>
+		<row bricks=".XXXX..XXXX."/>
+		<row bricks=".XXXX..XXXX."/>
+		<row bricks=".XXXX..XXXX."/>
+		<row bricks=".XXXX..XXXX."/>
 	</builder>
 </level>

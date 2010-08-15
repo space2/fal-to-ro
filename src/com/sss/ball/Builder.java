@@ -18,6 +18,4 @@ public abstract class Builder {
     }
 
     abstract protected void init(XMLNode xml, GameState gameState);
-
-    abstract public void run();
 }

@@ -5,6 +5,8 @@ import java.util.Vector;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import com.sss.ball.bricks.SimpleBrick;
+
 public class GameState extends State {
 
     public static final float GAME_AREA_X = 32;
@@ -15,12 +17,14 @@ public class GameState extends State {
     public static final float RACKET_Y = GAME_AREA_H - Racket.RACKET_HEIGHT - EXTRA_BOTTOM_GAP;
 
     private int mTexBalls;
+    private int mTexBricks;
     private int mTexRackets;
     private Vector<Sprite> mSprites = new Vector<Sprite>();
     private Racket mRacket = new Racket(this);
     private Vector<Ball> mBalls = new Vector<Ball>();
     private LevelLoader mLevelLoader = new LevelLoader(this);
     private Background mBg;
+    private Builder mBuilder;
 
     protected GameState() {
         super(STATE_GAME);
@@ -30,6 +34,7 @@ public class GameState extends State {
     public void create() {
         super.create();
         mTexBalls = TextureUtil.loadTexture("/gfx/balls.png");
+        mTexBricks = TextureUtil.loadTexture("/gfx/bricks.png");
         mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
 
         loadLevel("/packs/def/level01.xml");
@@ -107,6 +112,10 @@ public class GameState extends State {
         return mTexBalls;
     }
 
+    public int getTexBricks() {
+        return mTexBricks;
+    }
+
     public int getTexRackets() {
         return mTexRackets;
     }
@@ -141,6 +150,18 @@ public class GameState extends State {
 
     public void setBackground(Background bg) {
         mBg = bg;
+    }
+
+    public void setBuilder(Builder builder) {
+        mBuilder = builder;
+    }
+
+    public void addBrick(SimpleBrick brick) {
+        addSprite(brick);
+    }
+
+    private void addSprite(Sprite sprite) {
+        mSprites.add(sprite);
     }
 
 }
