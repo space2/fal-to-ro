@@ -1,6 +1,14 @@
 package com.sss.ball;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public class Util {
+
+    private static Util dummy = new Util();
+    private Util() {}
 
     public static int parseColor(String color) {
         if (color.startsWith("#")) {
@@ -17,6 +25,18 @@ public class Util {
             ret |= 0xff000000;
         }
         return ret;
+    }
+
+    public static InputStream open(String resName) {
+        InputStream is = dummy.getClass().getResourceAsStream(resName);
+        if (is == null) {
+            try {
+                is = new FileInputStream("res" + resName);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return is;
     }
 
 }
