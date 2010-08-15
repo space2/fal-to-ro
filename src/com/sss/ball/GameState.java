@@ -9,9 +9,10 @@ public class GameState extends State {
 
     public static final float GAME_AREA_X = 32;
     public static final float GAME_AREA_Y = 32;
-    public static final float GAME_AREA_H = 768 - 32;
-    public static final float GAME_AREA_W = GAME_AREA_H;
-    public static final float RACKET_Y = GAME_AREA_H - 32;
+    public static final float GAME_AREA_H = GameController.PREFERRED_HEIGHT - GAME_AREA_Y;
+    public static final float GAME_AREA_W = 32*24;
+    public static final float EXTRA_BOTTOM_GAP = 32; // can be used for home-shield
+    public static final float RACKET_Y = GAME_AREA_H - Racket.RACKET_HEIGHT - EXTRA_BOTTOM_GAP;
 
     private int mTexBalls;
     private int mTexRackets;
@@ -26,8 +27,8 @@ public class GameState extends State {
     @Override
     public void create() {
         super.create();
-        mTexBalls = TextureUtil.loadTexture("/balls.png");
-        mTexRackets = TextureUtil.loadTexture("/rackets.png");
+        mTexBalls = TextureUtil.loadTexture("/gfx/balls.png");
+        mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
         mSprites.add(mRacket);
         addNewBall();
     }

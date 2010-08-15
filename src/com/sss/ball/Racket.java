@@ -4,7 +4,8 @@ import org.lwjgl.input.Mouse;
 
 public class Racket extends Sprite {
 
-    private static final float RACKET_HEIGHT = 32;
+    public static final float RACKET_HEIGHT = 32;
+
     private static final int RACKET_MIN_SIZE = 2;
     private static final int RACKET_DEF_SIZE = 8;
     private static final int RACKET_MAX_SIZE = 16;

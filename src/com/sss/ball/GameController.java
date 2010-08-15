@@ -8,8 +8,9 @@ import org.lwjgl.opengl.GL11;
 
 public class GameController {
 
-    private static final int PREFERRED_WIDTH = 1024;
-    private static final int PREFERRED_HEIGHT = 768;
+    public static final int PREFERRED_WIDTH = 1024;
+    public static final int PREFERRED_HEIGHT = 768;
+
     private boolean mRunning;
     private long mLastTick = System.currentTimeMillis();
 
