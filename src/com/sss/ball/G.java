@@ -8,7 +8,7 @@ public class G {
         float a = ((argb >> 24) & 0xff) / 255.0f;
         float r = ((argb >> 16) & 0xff) / 255.0f;
         float g = ((argb >> 8) & 0xff) / 255.0f;
-        float b = ((argb >> 8) & 0xff) / 255.0f;
+        float b = ((argb >> 0) & 0xff) / 255.0f;
         float x2 = x + w;
         float y2 = y + h;
         GL11.glDisable(GL11.GL_TEXTURE);
