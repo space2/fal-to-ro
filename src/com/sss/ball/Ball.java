@@ -106,7 +106,40 @@ public class Ball extends Sprite {
                     brick.getX(), brick.getY(), brick.getWidth(), brick.getHeight());
             if (collision != CollisionUtil.COL_NONE) {
                 // There was some sort of collision
-                // TODO bounce
+                // Bounce
+                switch (collision) {
+                case CollisionUtil.COL_TOP:
+                    // Adjust Y and VY
+                    ny = brick.getY() - BALL_SIZE;
+                    if (mVY > 0) {
+                        mVY = -mVY;
+                    }
+                    break;
+                case CollisionUtil.COL_BOTTOM:
+                    // Adjust Y and VY
+                    ny = brick.getY() + brick.getHeight();
+                    if (mVY < 0) {
+                        mVY = -mVY;
+                    }
+                    break;
+                case CollisionUtil.COL_LEFT:
+                    // Adjust X and VX
+                    nx = brick.getX() - BALL_SIZE;
+                    if (mVX > 0) {
+                        mVX = -mVX;
+                    }
+                    break;
+                case CollisionUtil.COL_RIGHT:
+                    // Adjust X and VX
+                    nx = brick.getX() + brick.getWidth();
+                    if (mVX < 0) {
+                        mVX = -mVX;
+                    }
+                    break;
+                // TODO: corners
+                default:
+                    break;
+                }
                 // Remove brick
                 getGameState().onBrickHit(brick);
             }
