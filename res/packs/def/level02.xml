@@ -8,19 +8,5 @@
         <color pos="70" color="#804000"/>
         <color pos="100" color="#c06020"/>
 	</background>
-	<builder type="SimpleBrickBuilder" brickWidth="64" brickHeight="32">
-		<mapping char="." type="0"/>
-		<mapping char="X" type="1"/>
-		<row bricks="............"/>
-		<row bricks=".XXXX..XXXX."/>
-		<row bricks=".XXXX..XXXX."/>
-		<row bricks=".XXXX..XXXX."/>
-		<row bricks=".XXXX..XXXX."/>
-		<row bricks="............"/>
-		<row bricks="............"/>
-		<row bricks=".XXXX..XXXX."/>
-		<row bricks=".XXXX..XXXX."/>
-		<row bricks=".XXXX..XXXX."/>
-		<row bricks=".XXXX..XXXX."/>
-	</builder>
+	<builder type="ImageBrickBuilder" brickWidth="32" brickHeight="32" image="/packs/def/level02.png"/>
 </level>
