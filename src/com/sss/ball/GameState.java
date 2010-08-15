@@ -169,7 +169,7 @@ public class GameState extends State {
         mBuilder = builder;
     }
 
-    public void addBrick(SimpleBrick brick) {
+    public void addBrick(Brick brick) {
         addSprite(brick);
         mBricks.add(brick);
     }
