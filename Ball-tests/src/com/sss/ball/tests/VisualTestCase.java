@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 import junit.framework.TestCase;
 
-public class VisualTestCase extends TestCase implements ActionListener {
+abstract class VisualTestCase extends TestCase implements ActionListener {
 
     public static final int IMG_WIDTH = 640;
     public static final int IMG_HEIGHT = 480;
@@ -55,18 +55,13 @@ public class VisualTestCase extends TestCase implements ActionListener {
     protected void assertScreen(String id, String msg) {
         // Load reference image
         BufferedImage ref = loadRefImg(id);
-        if (ref == null) {
-            // reference image doesn't exists yet
+        if (ref == null || !compareImg(mImg, ref)) {
             if (askIfImageIsCorrect(mImg, ref, id)) {
+                System.out.println("!! Correct");
                 saveRefImg(mImg, id);
-            }
-        } else {
-            if (!compareImg(mImg, ref)) {
-                if (askIfImageIsCorrect(mImg, ref, id)) {
-                    saveRefImg(mImg, id);
-                } else {
-                    assertTrue(msg, false);
-                }
+            } else {
+                System.out.println("!! Wrong");
+                assertTrue(msg, false);
             }
         }
     }
@@ -161,7 +156,6 @@ public class VisualTestCase extends TestCase implements ActionListener {
                 mUiLock.wait();
                 return mAnswer;
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
                 return false;
             }
