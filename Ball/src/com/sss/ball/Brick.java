@@ -1,9 +1,9 @@
 package com.sss.ball;
 
-public abstract class Brick extends Sprite {
+public class Brick extends Sprite {
 
-    protected Brick(int type, GameState gameState) {
-        super(type, gameState);
+    public Brick(GameState gameState) {
+        super(TYPE_BRICK, gameState);
     }
 
     public boolean onHit() {

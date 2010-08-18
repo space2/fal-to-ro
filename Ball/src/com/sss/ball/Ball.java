@@ -11,7 +11,7 @@ public class Ball extends Sprite {
     private float mVX;
     private float mVY;
 
-    protected Ball(GameState gameState) {
+    public Ball(GameState gameState) {
         super(TYPE_BALL, gameState);
 
         setWidth(BALL_SIZE);
@@ -51,6 +51,10 @@ public class Ball extends Sprite {
         if (mState != STATE_IDLE) return;
 
         mState = STATE_MOVING;
+    }
+
+    public void setState(int newState) {
+        mState = newState;
     }
 
     @Override
@@ -156,5 +160,12 @@ public class Ball extends Sprite {
         setX(r.getX() + (r.getWidth() - BALL_SIZE) / 2);
     }
 
+    public void setVX(float vx) {
+        mVX = vx;
+    }
+
+    public void setVY(float vy) {
+        mVY = vy;
+    }
 
 }

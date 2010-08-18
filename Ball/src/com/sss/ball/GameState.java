@@ -28,7 +28,7 @@ public class GameState extends State {
     private Background mBg;
     private Builder mBuilder;
 
-    protected GameState() {
+    public GameState() {
         super(STATE_GAME);
     }
 

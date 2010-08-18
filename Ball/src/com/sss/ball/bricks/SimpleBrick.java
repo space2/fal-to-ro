@@ -9,7 +9,7 @@ public class SimpleBrick extends Brick {
     private int mBrickType;
 
     public SimpleBrick(GameState gameState, int type, float x, float y, float width, float height) {
-        super(TYPE_BRICK, gameState);
+        super(gameState);
         mBrickType = type;
         setX(x);
         setY(y);

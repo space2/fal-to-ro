@@ -9,7 +9,7 @@ public class PixelBrick extends Brick {
     private int mBrickColor;
 
     public PixelBrick(GameState gameState, int color, float x, float y, float width, float height) {
-        super(TYPE_BRICK, gameState);
+        super(gameState);
         mBrickColor = color;
         setX(x);
         setY(y);

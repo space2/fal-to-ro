@@ -28,10 +28,12 @@ public class VisualTestCase extends TestCase implements ActionListener {
     private static final String CORRECT = "Correct";
     private static final String WRONG = "Wrong";
 
-    private BufferedImage mImg;
-    private Graphics mGfx;
-    private Object mUiLock = new Object();
-    private boolean mAnswer;
+    private static BufferedImage mImg;
+    private static Graphics mGfx;
+    private static Object mUiLock = new Object();
+    private static boolean mAnswer;
+    private static JFrame mFrame;
+    private static ImgViewer mImgViewer;
 
     @Override
     protected void setUp() throws Exception {
@@ -55,12 +57,12 @@ public class VisualTestCase extends TestCase implements ActionListener {
         BufferedImage ref = loadRefImg(id);
         if (ref == null) {
             // reference image doesn't exists yet
-            if (askIfImageIsCorrect(mImg, ref)) {
+            if (askIfImageIsCorrect(mImg, ref, id)) {
                 saveRefImg(mImg, id);
             }
         } else {
             if (!compareImg(mImg, ref)) {
-                if (askIfImageIsCorrect(mImg, ref)) {
+                if (askIfImageIsCorrect(mImg, ref, id)) {
                     saveRefImg(mImg, id);
                 } else {
                     assertTrue(msg, false);
@@ -113,40 +115,45 @@ public class VisualTestCase extends TestCase implements ActionListener {
         return true;
     }
 
-    private boolean askIfImageIsCorrect(BufferedImage img, BufferedImage ref) {
+    private boolean askIfImageIsCorrect(BufferedImage img, BufferedImage ref, String id) {
         synchronized (mUiLock) {
-            // Create the dialog if needed
-            JFrame frame = new JFrame("Visual tests");
-            frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            if (mFrame == null) {
+                // Create the dialog if needed
+                mFrame = new JFrame("Visual tests");
+                mFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-            // Add the main container
-            JPanel panel = new JPanel();
-            frame.setContentPane(panel);
-            panel.setLayout(new BorderLayout());
+                // Add the main container
+                JPanel panel = new JPanel();
+                mFrame.setContentPane(panel);
+                panel.setLayout(new BorderLayout());
 
-            // Add the button row
-            JPanel buttons = new JPanel(new FlowLayout());
-            panel.add(buttons, BorderLayout.SOUTH);
-            JButton btn;
+                // Add the button row
+                JPanel buttons = new JPanel(new FlowLayout());
+                panel.add(buttons, BorderLayout.SOUTH);
+                JButton btn;
 
-            btn = new JButton(CORRECT);
-            btn.addActionListener(this);
-            buttons.add(btn);
+                btn = new JButton(CORRECT);
+                btn.addActionListener(this);
+                buttons.add(btn);
 
-            btn = new JButton(WRONG);
-            btn.addActionListener(this);
-            buttons.add(btn);
+                btn = new JButton(WRONG);
+                btn.addActionListener(this);
+                buttons.add(btn);
 
-            // Add image viewer
-            ImgViewer imgViewer = new ImgViewer(img, ref);
-            panel.add(imgViewer, BorderLayout.CENTER);
+                // Add image viewer
+                mImgViewer = new ImgViewer();
+                panel.add(mImgViewer, BorderLayout.CENTER);
 
-            // Add question
-            panel.add(new JLabel("Is the image correct?"), BorderLayout.NORTH);
+                // Add question
+                panel.add(new JLabel("Is the image correct?"), BorderLayout.NORTH);
+            }
+
+            mFrame.setTitle(buildRefImgName(id));
+            mImgViewer.setImgs(img, ref);
 
             // Finish setup window
-            frame.pack();
-            frame.setVisible(true);
+            mFrame.pack();
+            mFrame.setVisible(true);
 
             // Wait for answer
             try {
@@ -181,7 +188,10 @@ public class VisualTestCase extends TestCase implements ActionListener {
 
         private static final long serialVersionUID = 1L;
 
-        public ImgViewer(BufferedImage img, BufferedImage ref) {
+        public ImgViewer() {
+        }
+
+        public void setImgs(BufferedImage img, BufferedImage ref) {
             mImg = img;
             mRef = ref;
             setPreferredSize(new Dimension(img.getWidth(), img.getHeight()));
