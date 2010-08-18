@@ -33,7 +33,7 @@ public class CollisionUtil {
                 return COL_BOTTOM;
             }
         }
-        if (cy >= y && cy < y + y) {
+        if (cy >= y && cy < y + h) {
             // check left
             if (cx < x && cx + cr >= x) {
                 return COL_LEFT;
@@ -44,9 +44,30 @@ public class CollisionUtil {
             }
         }
 
-        // TODO: check corners
+        // Check the corners
+        if (checkDist(cx, cy, x, y, cr)) {
+            return COL_TOP_LEFT;
+        }
+        // Check the corners
+        if (checkDist(cx, cy, x + w - 1, y, cr)) {
+            return COL_TOP_RIGHT;
+        }
+        // Check the corners
+        if (checkDist(cx, cy, x, y + h - 1, cr)) {
+            return COL_BOTTOM_LEFT;
+        }
+        // Check the corners
+        if (checkDist(cx, cy, x + w - 1, y + h - 1, cr)) {
+            return COL_BOTTOM_RIGHT;
+        }
 
         return COL_NONE;
+    }
+
+    private static boolean checkDist(float cx, float cy, float x, float y, float cr) {
+        float dx = cx - x;
+        float dy = cy - y;
+        return (dx*dx + dy*dy < cr*cr);
     }
 
 }

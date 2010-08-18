@@ -53,5 +53,26 @@ public class TestCollision extends TestCase {
                 CollisionUtil.checkCollisionCircleBox(205, 125, 10, 100, 100, 100, 50));
     }
 
+    /**
+     * Check collision with corners
+     */
+    public void testCheckCollisionCircleBox02() {
+        assertEquals(CollisionUtil.COL_TOP_LEFT,
+                CollisionUtil.checkCollisionCircleBox(95, 95, 10, 100, 100, 100, 50));
+        assertEquals(CollisionUtil.COL_NONE,
+                CollisionUtil.checkCollisionCircleBox(91, 91, 10, 100, 100, 100, 50));
+        assertEquals(CollisionUtil.COL_TOP_RIGHT,
+                CollisionUtil.checkCollisionCircleBox(205, 95, 10, 100, 100, 100, 50));
+        assertEquals(CollisionUtil.COL_NONE,
+                CollisionUtil.checkCollisionCircleBox(209, 91, 10, 100, 100, 100, 50));
+        assertEquals(CollisionUtil.COL_BOTTOM_LEFT,
+                CollisionUtil.checkCollisionCircleBox(95, 155, 10, 100, 100, 100, 50));
+        assertEquals(CollisionUtil.COL_NONE,
+                CollisionUtil.checkCollisionCircleBox(91, 159, 10, 100, 100, 100, 50));
+        assertEquals(CollisionUtil.COL_BOTTOM_RIGHT,
+                CollisionUtil.checkCollisionCircleBox(205, 155, 10, 100, 100, 100, 50));
+        assertEquals(CollisionUtil.COL_NONE,
+                CollisionUtil.checkCollisionCircleBox(209, 159, 10, 100, 100, 100, 50));
+    }
 
 }
