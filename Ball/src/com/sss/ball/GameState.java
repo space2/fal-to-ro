@@ -1,12 +1,9 @@
 package com.sss.ball;
 
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-
-import com.sss.ball.bricks.SimpleBrick;
 
 public class GameState extends State {
 
@@ -26,7 +23,6 @@ public class GameState extends State {
     private Vector<Ball> mBalls = new Vector<Ball>();
     private LevelLoader mLevelLoader = new LevelLoader(this);
     private Background mBg;
-    private Builder mBuilder;
 
     public GameState() {
         super(STATE_GAME);
@@ -163,10 +159,6 @@ public class GameState extends State {
 
     public void setBackground(Background bg) {
         mBg = bg;
-    }
-
-    public void setBuilder(Builder builder) {
-        mBuilder = builder;
     }
 
     public void addBrick(Brick brick) {

@@ -47,7 +47,6 @@ public class LevelLoader {
             System.out.println("! Error in level, cannot create builder!");
             return false;
         }
-        mGameState.setBuilder(builder);
 
         return true;
     }
