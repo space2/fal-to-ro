@@ -40,8 +40,11 @@ public class ImageBrickBuilder extends Builder {
             x = 0;
             for (int j = 0; j < iw; j++) {
                 int color = rgb[i*iw + j];
-                PixelBrick brick = new PixelBrick(gameState, color, x, y, brickWidth, brickHeight);
-                gameState.addBrick(brick);
+                if (((color >> 24) & 0xff) >= 0xf0) {
+                    // Opaque pixel, so add a brick
+                    PixelBrick brick = new PixelBrick(gameState, color, x, y, brickWidth, brickHeight);
+                    gameState.addBrick(brick);
+                }
                 x += brickWidth;
             }
             y += brickHeight;
