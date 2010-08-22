@@ -144,6 +144,8 @@ public class CollisionUtil {
 
     public static int doCollisionWithBox(float x, float y, float w, float h) {
         int collision = CollisionUtil.checkCollisionCircleBox(mTmpX, mTmpY, mTmpR, x, y, w, h);
+        double alpha = 0;
+        float cosa = 0, sina = 0, nvx, nvy, dx, dy;
         if (collision != CollisionUtil.COL_NONE) {
             // There was some sort of collision
             // Bounce
@@ -178,6 +180,19 @@ public class CollisionUtil {
                 break;
             // TODO: corners
             case CollisionUtil.COL_TOP_LEFT:
+                dx = x - mTmpX;
+                dy = y - mTmpY;
+                alpha = Math.atan2(dx, dy);
+                cosa = (float) Math.cos(alpha);
+                sina = (float) Math.sin(alpha);
+                // rotate with alpha
+                nvx = mTmpVX * cosa - mTmpVY * sina;
+                nvy = mTmpVY * cosa + mTmpVX * sina;
+                // reflect
+                nvy = -nvy;
+                // rotate back
+                mTmpVX = nvx * cosa + nvy * sina;
+                mTmpVY = nvy * cosa - nvx * sina;
                 break;
             default:
                 break;
