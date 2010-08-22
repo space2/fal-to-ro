@@ -87,18 +87,18 @@ public class Ball extends Sprite {
         float nvx = CollisionUtil.getNewVX();
         float nvy = CollisionUtil.getNewVY();
 
-        if (ny > GameState.RACKET_Y) {
+        if (ny > GameState.RACKET_Y + BALL_SIZE/2) {
             // Too late to hit back, ball lost
             getGameState().onBallLost(this);
             return;
         }
 
         // check collision with racket
-        if (ny > GameState.RACKET_Y - BALL_SIZE) {
+        if (ny > GameState.RACKET_Y - BALL_SIZE/2) {
             Racket r = getGameState().getRacket();
-            if (nx >= r.getX() - BALL_SIZE/2 && nx < r.getX() + r.getWidth() + BALL_SIZE/2) {
+            if (nx >= r.getX()&& nx < r.getX() + r.getWidth()) {
                 // succesfull bounce
-                ny = GameState.RACKET_Y - BALL_SIZE;
+                ny = GameState.RACKET_Y - BALL_SIZE/2;
                 if (nvy > 0) {
                     nvy = -nvy;
                 }
