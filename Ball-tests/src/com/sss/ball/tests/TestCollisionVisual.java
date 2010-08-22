@@ -123,6 +123,39 @@ public class TestCollisionVisual extends VisualTestCase {
         assertSim("", "Collision between ball and top-left corner of the brick is incorrect");
     }
 
+    public void testBallBrickCollisionTopRight0() {
+        // Create a ball
+        createBall(250, 50, -270, 150);
+
+        // create the racket
+        createBrick(110, 100, 100, 50);
+
+        // Do the simulation
+        assertSim("", "Collision between ball and top-left corner of the brick is incorrect");
+    }
+
+    public void testBallBrickCollisionBottomLeft0() {
+        // Create a ball
+        createBall(50, 200, 120, -160);
+
+        // create the racket
+        createBrick(110, 100, 100, 50);
+
+        // Do the simulation
+        assertSim("", "Collision between ball and top-left corner of the brick is incorrect");
+    }
+
+    public void testBallBrickCollisionBottomRight0() {
+        // Create a ball
+        createBall(250, 200, -170, -190);
+
+        // create the racket
+        createBrick(110, 100, 100, 50);
+
+        // Do the simulation
+        assertSim("", "Collision between ball and top-left corner of the brick is incorrect");
+    }
+
     private void createBall(float x, float y, float vx, float vy) {
         mBall = new Ball(mGameState);
         mBall.setX(x);

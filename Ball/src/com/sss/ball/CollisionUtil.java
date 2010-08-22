@@ -144,8 +144,6 @@ public class CollisionUtil {
 
     public static int doCollisionWithBox(float x, float y, float w, float h) {
         int collision = CollisionUtil.checkCollisionCircleBox(mTmpX, mTmpY, mTmpR, x, y, w, h);
-        double alpha = 0;
-        float cosa = 0, sina = 0, nvx, nvy, dx, dy;
         if (collision != CollisionUtil.COL_NONE) {
             // There was some sort of collision
             // Bounce
@@ -178,27 +176,39 @@ public class CollisionUtil {
                     mTmpVX = -mTmpVX;
                 }
                 break;
-            // TODO: corners
             case CollisionUtil.COL_TOP_LEFT:
-                dx = x - mTmpX;
-                dy = y - mTmpY;
-                alpha = Math.atan2(dx, dy);
-                cosa = (float) Math.cos(alpha);
-                sina = (float) Math.sin(alpha);
-                // rotate with alpha
-                nvx = mTmpVX * cosa - mTmpVY * sina;
-                nvy = mTmpVY * cosa + mTmpVX * sina;
-                // reflect
-                nvy = -nvy;
-                // rotate back
-                mTmpVX = nvx * cosa + nvy * sina;
-                mTmpVY = nvy * cosa - nvx * sina;
+                doCornerCollision(x - mTmpX, y - mTmpY);
+                break;
+            case CollisionUtil.COL_TOP_RIGHT:
+                doCornerCollision(x + w - mTmpX, y - mTmpY);
+                break;
+            case CollisionUtil.COL_BOTTOM_LEFT:
+                doCornerCollision(x - mTmpX, y + h - mTmpY);
+                break;
+            case CollisionUtil.COL_BOTTOM_RIGHT:
+                doCornerCollision(x + w - mTmpX, y + h - mTmpY);
                 break;
             default:
                 break;
             }
         }
         return collision;
+    }
+
+    private static void doCornerCollision(float dx, float dy) {
+        double alpha = 0;
+        float cosa = 0, sina = 0, nvx, nvy;
+        alpha = Math.atan2(dx, dy);
+        cosa = (float) Math.cos(alpha);
+        sina = (float) Math.sin(alpha);
+        // rotate with alpha
+        nvx = mTmpVX * cosa - mTmpVY * sina;
+        nvy = mTmpVY * cosa + mTmpVX * sina;
+        // reflect
+        nvy = -nvy;
+        // rotate back
+        mTmpVX = nvx * cosa + nvy * sina;
+        mTmpVY = nvy * cosa - nvx * sina;
     }
 
     public static float getNewX() {
