@@ -17,6 +17,11 @@ public class SimpleBrick extends Brick {
         setHeight(height);
     }
 
+    public SimpleBrick(GameState gameState, int type) {
+        super(gameState);
+        mBrickType = type;
+    }
+
     @Override
     public void render() {
         super.render();
@@ -26,6 +31,14 @@ public class SimpleBrick extends Brick {
         G.drawImage(getGameState().getTexBricks(),
                 getX(), getY(), getWidth(), getHeight(),
                 col * 64/256.0f, row * 32/256.0f, 64/256.0f, 32/256.0f);
+    }
+
+    public void setBrickType(int type) {
+        mBrickType = type;
+    }
+
+    public int getBrickType() {
+        return mBrickType;
     }
 
 }

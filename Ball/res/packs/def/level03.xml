@@ -1,0 +1,16 @@
+<!DOCTYPE root>
+<level>
+	<title>Introduction</title>
+	<author>Pal Szasz (pal.szasz@gmail.com)</author>
+	<background type="GradientBackground">
+		<color pos="0" color="#0040c0"/>
+        <color pos="70" color="#c04080"/>
+        <color pos="70" color="#804000"/>
+        <color pos="100" color="#c06020"/>
+	</background>
+	<builder type="ImageBrickBuilder" brickWidth="64" brickHeight="32" image="/packs/def/level03.png">
+        <mapping color="#ffffff" type="1"/>
+        <mapping color="#ff0000" type="2"/>
+        <mapping color="#7f7f7f" type="5" class="MultiHitBrick"/>
+	</builder>
+</level>

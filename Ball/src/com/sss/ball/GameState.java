@@ -35,7 +35,7 @@ public class GameState extends State {
         mTexBricks = TextureUtil.loadTexture("/gfx/bricks.png");
         mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
 
-        loadLevel("/packs/def/level02.xml");
+        loadLevel("/packs/def/level03.xml");
 
         mSprites.add(mRacket);
         addNewBall();
