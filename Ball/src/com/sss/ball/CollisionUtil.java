@@ -196,19 +196,24 @@ public class CollisionUtil {
     }
 
     private static void doCornerCollision(float dx, float dy) {
-        double alpha = 0;
-        float cosa = 0, sina = 0, nvx, nvy;
-        alpha = Math.atan2(dx, dy);
-        cosa = (float) Math.cos(alpha);
-        sina = (float) Math.sin(alpha);
+        double alpha = Math.atan2(dx, dy);
+        float cosa = (float) Math.cos(alpha);
+        float sina = (float) Math.sin(alpha);
         // rotate with alpha
-        nvx = mTmpVX * cosa - mTmpVY * sina;
-        nvy = mTmpVY * cosa + mTmpVX * sina;
+        float nvx = mTmpVX * cosa - mTmpVY * sina;
+        float nvy = mTmpVY * cosa + mTmpVX * sina;
         // reflect
         nvy = -nvy;
         // rotate back
         mTmpVX = nvx * cosa + nvy * sina;
         mTmpVY = nvy * cosa - nvx * sina;
+        // Also need to adjust the ball distance
+        float dd = (float) Math.sqrt(dx*dx + dy*dy);
+        float extra = mTmpR - dd;
+        if (extra > 0) {
+            mTmpX -= dx * extra / mTmpR;
+            mTmpY -= dy * extra / mTmpR;
+        }
     }
 
     public static float getNewX() {
