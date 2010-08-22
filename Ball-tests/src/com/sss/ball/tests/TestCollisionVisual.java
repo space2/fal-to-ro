@@ -86,8 +86,8 @@ public class TestCollisionVisual extends VisualTestCase {
             mBall.tick(25);
             int blue = 128 - i * 128 / 40;
             int green = i * 128 / 40;
-            int col = 0x0f000000 | blue | (green << 8);
-            g.setColor(new Color(col));
+            int col = 0x7f000000 | blue | (green << 8);
+            g.setColor(new Color(col, true));
             g.drawArc((int)mBall.getX(), (int)mBall.getY(), (int)mBall.getWidth(), (int)mBall.getHeight(), 0, 360);
         }
 
