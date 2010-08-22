@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -29,7 +31,7 @@ abstract class VisualTestCase extends TestCase implements ActionListener {
     private static final String WRONG = "Wrong";
 
     private static BufferedImage mImg;
-    private static Graphics mGfx;
+    private static Graphics2D mGfx;
     private static Object mUiLock = new Object();
     private static boolean mAnswer;
     private static JFrame mFrame;
@@ -39,10 +41,11 @@ abstract class VisualTestCase extends TestCase implements ActionListener {
     protected void setUp() throws Exception {
         super.setUp();
         mImg = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        mGfx = mImg.getGraphics();
+        mGfx = (Graphics2D) mImg.getGraphics();
         mGfx.setColor(Color.WHITE);
         mGfx.fillRect(0, 0, IMG_WIDTH, IMG_WIDTH);
         mGfx.setColor(Color.BLACK);
+        mGfx.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     }
 
     @Override
@@ -66,7 +69,7 @@ abstract class VisualTestCase extends TestCase implements ActionListener {
         }
     }
 
-    protected Graphics getGraphics() {
+    protected Graphics2D getGraphics() {
         return mGfx;
     }
 

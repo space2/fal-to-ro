@@ -2,6 +2,7 @@ package com.sss.ball.tests;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import com.sss.ball.Ball;
 import com.sss.ball.Brick;
@@ -79,11 +80,14 @@ public class TestCollisionVisual extends VisualTestCase {
     }
 
     private void assertSim(String string, String string2) {
-        Graphics g = getGraphics();
+        Graphics2D g = getGraphics();
 
         for (int i = 0; i < 40; i++) {
             mBall.tick(25);
-            g.setColor(Color.BLUE);
+            int blue = 128 - i * 128 / 40;
+            int green = i * 128 / 40;
+            int col = 0x0f000000 | blue | (green << 8);
+            g.setColor(new Color(col));
             g.drawArc((int)mBall.getX(), (int)mBall.getY(), (int)mBall.getWidth(), (int)mBall.getHeight(), 0, 360);
         }
 
