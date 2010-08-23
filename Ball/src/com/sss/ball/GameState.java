@@ -21,6 +21,7 @@ public class GameState extends State {
     private Vector<Sprite> mSprites = new Vector<Sprite>();
     private Vector<Brick> mBricks = new Vector<Brick>();
     private Vector<Bonus> mBonuses = new Vector<Bonus>();
+    private Vector<Logic> mLogic = new Vector<Logic>();
     private Racket mRacket = new Racket(this);
     private Vector<Ball> mBalls = new Vector<Ball>();
     private LevelLoader mLevelLoader = new LevelLoader(this);
@@ -212,19 +213,24 @@ public class GameState extends State {
     }
 
     public void onBrickHit(Brick brick) {
+        boolean rm = false;
         if (brick.onHit()) {
             removeBrick(brick);
-            // add a bonus as well
-            Bonus b = new Bonus(this);
-            b.setBonusType(Bonus.BTYPE_INC_RACKET);
-            b.centerOn(brick);
-            addBonus(b);
+            rm = true;
+        }
+
+        for (Logic l : mLogic) {
+            l.onBrickHit(brick, rm);
         }
     }
 
     private void removeBrick(Brick brick) {
         mBricks.remove(brick);
         mSprites.remove(brick);
+    }
+
+    public void addLogic(Logic logic) {
+        mLogic.add(logic);
     }
 
 }

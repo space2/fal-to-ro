@@ -5,6 +5,11 @@ public class Bonus extends Sprite {
     private static final float BONUS_SIZE = 64;
 
     public static final int BTYPE_INC_RACKET = 0;
+    public static final int BTYPE_COUNT = 1;
+
+    public static final String BTYPE_NAMES[] = {
+        "rac+",
+    };
 
     private static final float GRAVITY = 0.1f;
 
@@ -12,7 +17,7 @@ public class Bonus extends Sprite {
     private float mVX;
     private float mVY;
 
-    protected Bonus(GameState gameState) {
+    public Bonus(GameState gameState) {
         super(TYPE_BONUS, gameState);
         setWidth(BONUS_SIZE);
         setHeight(BONUS_SIZE);
@@ -89,6 +94,10 @@ public class Bonus extends Sprite {
             System.err.println("Unknown bonus type: " + mBonusType);
             break;
         }
+    }
+
+    public static int lookupType(String string) {
+        return 0;
     }
 
 }

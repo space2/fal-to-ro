@@ -48,6 +48,15 @@ public class LevelLoader {
             return false;
         }
 
+        // Collect extra game logic
+        for (int i = 0; i < root.getChildCount(); i++) {
+            XMLNode child = root.getChild(i);
+            if ("logic".equals(child.getName())) {
+                Logic logic = Logic.create(child, mGameState);
+                mGameState.addLogic(logic);
+            }
+        }
+
         return true;
     }
 
