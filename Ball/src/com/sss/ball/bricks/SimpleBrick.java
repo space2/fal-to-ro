@@ -25,11 +25,15 @@ public class SimpleBrick extends Brick {
     @Override
     public void render() {
         super.render();
+        drawBrickAt(0, 0);
+    }
+
+    protected void drawBrickAt(float dx, float dy) {
         int tmp = mBrickType - 1;
         int row = tmp >> 2;
         int col = tmp & 3;
         G.drawImage(getGameState().getTexBricks(),
-                getX(), getY(), getWidth(), getHeight(),
+                getX() + dx, getY() + dy, getWidth(), getHeight(),
                 col * 64/256.0f, row * 32/256.0f, 64/256.0f, 32/256.0f);
     }
 
