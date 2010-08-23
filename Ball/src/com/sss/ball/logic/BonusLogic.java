@@ -46,7 +46,7 @@ public class BonusLogic extends Logic {
         // add a bonus as well
         if (btype >= 0) {
             Bonus b = new Bonus(getGameState());
-            b.setBonusType(Bonus.BTYPE_INC_RACKET);
+            b.setBonusType(btype);
             b.centerOn(brick);
             getGameState().addBonus(b);
         }
