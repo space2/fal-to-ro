@@ -131,6 +131,9 @@ public class GameController {
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glClearColor(1.0f, 0, 0, 1.0f);
+
+            // Setup mouse
+            Mouse.setGrabbed(mFullScreen);
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
