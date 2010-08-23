@@ -24,15 +24,33 @@ public class Racket extends Sprite {
     }
 
     private void setSize(int size) {
+        // Clamp size to sane values
         if (size < RACKET_MIN_SIZE) {
             size = RACKET_MIN_SIZE;
         }
         if (size > RACKET_MAX_SIZE) {
             size = RACKET_MAX_SIZE;
         }
+
+        // update values
         mSize = size;
+        float cx = getX() + getWidth() / 2;
         setWidth(size * RACKET_UNIT_SIZE);
+        setX(cx - getWidth() / 2);
+
+        // Make sure racket is in game area
+        if (getX() < 0) {
+            setX(0);
+        }
+        if (getX() + getWidth() > GameState.GAME_AREA_W) {
+            setX(GameState.GAME_AREA_W - getWidth());
+        }
     }
+
+    public void changeSize(int delta) {
+        setSize(mSize + delta);
+    }
+
 
     @Override
     public void render() {

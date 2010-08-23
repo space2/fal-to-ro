@@ -15,10 +15,12 @@ public class GameState extends State {
     public static final float RACKET_Y = GAME_AREA_H - Racket.RACKET_HEIGHT - EXTRA_BOTTOM_GAP;
 
     private int mTexBalls;
+    private int mTexBonuses;
     private int mTexBricks;
     private int mTexRackets;
     private Vector<Sprite> mSprites = new Vector<Sprite>();
     private Vector<Brick> mBricks = new Vector<Brick>();
+    private Vector<Bonus> mBonuses = new Vector<Bonus>();
     private Racket mRacket = new Racket(this);
     private Vector<Ball> mBalls = new Vector<Ball>();
     private LevelLoader mLevelLoader = new LevelLoader(this);
@@ -32,10 +34,11 @@ public class GameState extends State {
     public void create() {
         super.create();
         mTexBalls = TextureUtil.loadTexture("/gfx/balls.png");
+        mTexBonuses = TextureUtil.loadTexture("/gfx/bonuses.png");
         mTexBricks = TextureUtil.loadTexture("/gfx/bricks.png");
         mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
 
-        loadLevel("/packs/def/level03.xml");
+        loadLevel("/packs/def/level01.xml");
 
         mSprites.add(mRacket);
         addNewBall();
@@ -75,7 +78,6 @@ public class GameState extends State {
         for (Ball ball : mBalls) {
             ball.fire();
         }
-
     }
 
     @Override
@@ -92,9 +94,22 @@ public class GameState extends State {
         // render sprites
         GL11.glPushMatrix();
         GL11.glTranslatef(GAME_AREA_X, GAME_AREA_Y, 0);
-        for (Sprite sprite : mSprites) {
-            sprite.render();
+
+        // first render the bricks
+        for (Brick brick: mBricks) {
+            brick.render();
         }
+        // then render the bonuses
+        for (Bonus bonus : mBonuses) {
+            bonus.render();
+        }
+        // then render the balls
+        for (Ball ball: mBalls) {
+            ball.render();
+        }
+        // The racket is always on top
+        mRacket.render();
+
         GL11.glPopMatrix();
     }
 
@@ -114,11 +129,19 @@ public class GameState extends State {
         for (Brick brick: mBricks) {
             brick.tick(delta);
         }
+        for (int i = mBonuses.size()-1; i >= 0; i--) {
+            Bonus bonus = mBonuses.get(i);
+            bonus.tick(delta);
+        }
 
     }
 
     public int getTexBalls() {
         return mTexBalls;
+    }
+
+    public int getTexBonuses() {
+        return mTexBonuses;
     }
 
     public int getTexBricks() {
@@ -166,6 +189,16 @@ public class GameState extends State {
         mBricks.add(brick);
     }
 
+    public void addBonus(Bonus bonus) {
+        addSprite(bonus);
+        mBonuses.add(bonus);
+    }
+
+    public void removeBonus(Bonus bonus) {
+        mSprites.remove(bonus);
+        mBonuses.remove(bonus);
+    }
+
     private void addSprite(Sprite sprite) {
         mSprites.add(sprite);
     }
@@ -181,6 +214,11 @@ public class GameState extends State {
     public void onBrickHit(Brick brick) {
         if (brick.onHit()) {
             removeBrick(brick);
+            // add a bonus as well
+            Bonus b = new Bonus(this);
+            b.setBonusType(Bonus.BTYPE_INC_RACKET);
+            b.centerOn(brick);
+            addBonus(b);
         }
     }
 

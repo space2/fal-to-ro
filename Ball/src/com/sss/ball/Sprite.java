@@ -6,6 +6,7 @@ public abstract class Sprite {
     public static final int TYPE_RACKET = 1;
     public static final int TYPE_BALL = 2;
     public static final int TYPE_BRICK = 4;
+    public static final int TYPE_BONUS = 8;
 
     private float mX, mY, mW, mH;
     private int mType;
