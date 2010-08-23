@@ -78,4 +78,19 @@ public class Racket extends Sprite {
         }
     }
 
+    /**
+     * Called when a ball hits this racket
+     * @param ball The ball which hit this racket
+     */
+    public void onHit(Ball ball) {
+        // calculate angle
+        float maxAngle = (float) (80 * Math.PI / 180);
+        float cxr = getX() + getWidth() / 2;
+        float cxb = ball.getX() + ball.getWidth() / 2;
+        float alpha = (cxr - cxb) * maxAngle / (getWidth() / 2);
+        float speed = 300;
+        ball.setVX((float) (-Math.sin(alpha) * speed));
+        ball.setVY((float) (-Math.cos(alpha) * speed));
+    }
+
 }

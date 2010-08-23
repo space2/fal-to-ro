@@ -93,12 +93,17 @@ public class Ball extends Sprite {
             return;
         }
 
+        boolean hitRacket = false;
+        Racket r = getGameState().getRacket();
+
         // check collision with racket
         if (ny > GameState.RACKET_Y - BALL_SIZE/2) {
-            Racket r = getGameState().getRacket();
             if (nx >= r.getX()&& nx < r.getX() + r.getWidth()) {
                 // succesfull bounce
+                hitRacket = true;
+                // adjust Y position
                 ny = GameState.RACKET_Y - BALL_SIZE/2;
+                // do simple bouncing
                 if (nvy > 0) {
                     nvy = -nvy;
                 }
@@ -110,6 +115,11 @@ public class Ball extends Sprite {
         setY(ny - BALL_SIZE/2);
         setVX(nvx);
         setVY(nvy);
+
+        // The racket might want to change the angle, or stick the ball, etc
+        if (hitRacket) {
+            r.onHit(this);
+        }
     }
 
     public void initPos(Racket r) {
