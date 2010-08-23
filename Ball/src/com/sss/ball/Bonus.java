@@ -5,10 +5,11 @@ public class Bonus extends Sprite {
     private static final float BONUS_SIZE = 64;
 
     public static final int BTYPE_INC_RACKET = 0;
-    public static final int BTYPE_COUNT = 1;
+    public static final int BTYPE_DEC_RACKET = 1;
+    public static final int BTYPE_COUNT = 2;
 
     public static final String BTYPE_NAMES[] = {
-        "rac+",
+        "rac+", "rac-",
     };
 
     private static final float GRAVITY = 0.1f;
@@ -90,6 +91,9 @@ public class Bonus extends Sprite {
         case BTYPE_INC_RACKET:
             getGameState().getRacket().changeSize(+1);
             break;
+        case BTYPE_DEC_RACKET:
+            getGameState().getRacket().changeSize(-1);
+            break;
         default:
             System.err.println("Unknown bonus type: " + mBonusType);
             break;
@@ -97,7 +101,13 @@ public class Bonus extends Sprite {
     }
 
     public static int lookupType(String string) {
-        return 0;
+        for (int i = 0; i < BTYPE_NAMES.length; i++) {
+            String s = BTYPE_NAMES[i];
+            if (s.equals(string)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
 }
