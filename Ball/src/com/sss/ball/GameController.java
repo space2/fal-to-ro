@@ -13,12 +13,26 @@ public class GameController {
 
     private boolean mRunning;
     private long mLastTick = System.currentTimeMillis();
+    private boolean mFullScreen = false; // while debugging it's better to not use fullscreen
 
     private GameState mGameState = new GameState();
     private State mState = null;
     private State mStates[] = {
             mGameState,
     };
+
+    public void parseArgs(final String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if (arg.equals("-f") || arg.equals("--fullscreen")) {
+                mFullScreen = true;
+            } else {
+                System.out.println("Unknown argument: " + arg);
+            }
+        }
+
+    }
+
 
     /**
      * Main application loop.
@@ -100,7 +114,7 @@ public class GameController {
 
             // Set the display mode
             Display.setDisplayMode(best);
-            Display.setFullscreen(false); // while debugging it's better to not use fullscreen
+            Display.setFullscreen(mFullScreen);
             Display.setTitle("A simple brickbreaker game");
             Display.setVSyncEnabled(true);
             Display.create();
@@ -149,6 +163,5 @@ public class GameController {
         // Update the screen
         Display.update();
     }
-
 
 }
