@@ -40,18 +40,48 @@ public class GameState extends State {
         mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
 
         loadLevel("/packs/def/level01.xml");
-
-        mSprites.add(mRacket);
-        addNewBall();
     }
 
     private void loadLevel(String name) {
         // TODO: clean the scene
+        resetLevel();
 
         // Load new level using level loader
         if (!mLevelLoader.load(name)) {
             System.out.println("! Failed to load level: " + name);
         }
+    }
+
+    /**
+     * Reset the game to load a new level
+     */
+    private void resetLevel() {
+        // remove everything
+        mSprites.clear();
+        mBalls.clear();
+        mBricks.clear();
+        mBonuses.clear();
+
+        // add racket
+        mSprites.add(mRacket);
+
+        resetNewLife();
+    }
+
+    /**
+     * Reset the game state to start a new life
+     */
+    private void resetNewLife() {
+        mRacket.resetNewLife();
+        removeAllBalls();
+        addNewBall();
+    }
+
+    private void removeAllBalls() {
+        for (Ball ball : mBalls) {
+            mSprites.remove(ball);
+        }
+        mBalls.clear();
     }
 
     @Override
@@ -168,10 +198,14 @@ public class GameState extends State {
         mBalls.remove(ball);
         mSprites.remove(ball);
 
-        // if no balls left, add one
+        // if no balls left, then one life is lost
         if (mBalls.size() == 0) {
-            addNewBall();
+            onLifeLost();
         }
+    }
+
+    private void onLifeLost() {
+        resetNewLife();
     }
 
     private void addNewBall() {

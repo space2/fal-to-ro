@@ -19,11 +19,11 @@ public class Racket extends Sprite {
     public Racket(GameState gameState) {
         super(TYPE_RACKET, gameState);
 
-        setSize(RACKET_DEF_SIZE);
         setHeight(RACKET_HEIGHT);
         setY(GameState.RACKET_Y);
         setX((GameState.GAME_AREA_W - getWidth()) / 2);
 
+        resetNewLife();
     }
 
     private void setSize(int size) {
@@ -120,6 +120,11 @@ public class Racket extends Sprite {
 
     public void setMagnet(boolean b) {
         mMagnet = b;
+    }
+
+    public void resetNewLife() {
+        setSize(RACKET_DEF_SIZE);
+        mMagnet = false;
     }
 
 }

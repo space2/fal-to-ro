@@ -136,4 +136,8 @@ public class Ball extends Sprite {
         mVY = vy;
     }
 
+    public void resetNewLife() {
+        // TODO: reset speed
+    }
+
 }
