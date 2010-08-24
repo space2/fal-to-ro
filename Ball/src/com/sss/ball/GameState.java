@@ -14,9 +14,13 @@ public class GameState extends State {
     public static final float EXTRA_BOTTOM_GAP = 32; // can be used for home-shield
     public static final float RACKET_Y = GAME_AREA_H - Racket.RACKET_HEIGHT - EXTRA_BOTTOM_GAP;
 
+    private static final float DIGIT_WIDTH = 48;
+    private static final float DIGIT_HEIGHT = 64;
+
     private int mTexBalls;
     private int mTexBonuses;
     private int mTexBricks;
+    private int mTexDigits;
     private int mTexRackets;
     private Vector<Sprite> mSprites = new Vector<Sprite>();
     private Vector<Brick> mBricks = new Vector<Brick>();
@@ -26,6 +30,8 @@ public class GameState extends State {
     private Vector<Ball> mBalls = new Vector<Ball>();
     private LevelLoader mLevelLoader = new LevelLoader(this);
     private Background mBg;
+    private int mScore = 0;
+    private int mLives = 4 + 1;
 
     public GameState() {
         super(STATE_GAME);
@@ -37,6 +43,7 @@ public class GameState extends State {
         mTexBalls = TextureUtil.loadTexture("/gfx/balls.png");
         mTexBonuses = TextureUtil.loadTexture("/gfx/bonuses.png");
         mTexBricks = TextureUtil.loadTexture("/gfx/bricks.png");
+        mTexDigits = TextureUtil.loadTexture("/gfx/digits.png");
         mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
 
         loadLevel("/packs/def/level01.xml");
@@ -74,7 +81,10 @@ public class GameState extends State {
     private void resetNewLife() {
         mRacket.resetNewLife();
         removeAllBalls();
-        addNewBall();
+        mLives--;
+        if (mLives > 0) {
+            addNewBall();
+        }
     }
 
     private void removeAllBalls() {
@@ -88,6 +98,9 @@ public class GameState extends State {
     public void destroy() {
         super.destroy();
         mTexBalls = -1;
+        mTexBonuses = -1;
+        mTexBricks = -1;
+        mTexDigits = -1;
         mTexRackets = -1;
     }
 
@@ -142,6 +155,36 @@ public class GameState extends State {
         mRacket.render();
 
         GL11.glPopMatrix();
+
+        // render the game state
+        renderGameState(GAME_AREA_X + GAME_AREA_W + 32, GAME_AREA_Y + 32);
+    }
+
+    private void renderGameState(float x, float y) {
+        // Draw score
+        G.drawImage(mTexDigits, x, y, 256, 32, 0, 160/256.0f, 256/256.0f, 32/256.0f);
+        y += 32;
+        drawNumber(mScore, x, y);
+        y += DIGIT_HEIGHT;
+        // Gap
+        y += 16;
+        // Draw lives
+        G.drawImage(mTexDigits, x, y, 256, 32, 0, 128/256.0f, 256/256.0f, 32/256.0f);
+        y += 32;
+        drawNumber(mLives, x, y);
+        y += DIGIT_HEIGHT;
+
+    }
+
+    private void drawNumber(int score, float x, float y) {
+        String s = Integer.toString(score);
+        for (int i = 0; i < s.length(); i++) {
+            int v = s.charAt(i) - '0';
+            int row = v / 5;
+            int col = v % 5;
+            G.drawImage(mTexDigits, x, y, DIGIT_WIDTH, DIGIT_HEIGHT, col*48/256.0f, row*64/256.0f, 48/256.0f, 64/256.0f);
+            x += DIGIT_WIDTH;
+        }
     }
 
     @Override
@@ -154,7 +197,8 @@ public class GameState extends State {
         // }
 
         mRacket.tick(delta);
-        for (Ball ball: mBalls) {
+        for (int i = mBalls.size()-1; i >= 0; i--) {
+            Ball ball = mBalls.get(i);
             ball.tick(delta);
         }
         for (Brick brick: mBricks) {
@@ -177,6 +221,10 @@ public class GameState extends State {
 
     public int getTexBricks() {
         return mTexBricks;
+    }
+
+    public int getTexDigits() {
+        return mTexDigits;
     }
 
     public int getTexRackets() {
