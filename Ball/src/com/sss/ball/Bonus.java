@@ -4,12 +4,13 @@ public class Bonus extends Sprite {
 
     private static final float BONUS_SIZE = 64;
 
-    public static final int BTYPE_INC_RACKET = 0;
-    public static final int BTYPE_DEC_RACKET = 1;
-    public static final int BTYPE_COUNT = 2;
+    public static final int BTYPE_INC_RACKET    = 0;
+    public static final int BTYPE_DEC_RACKET    = 1;
+    public static final int BTYPE_MAGNET        = 2;
+    public static final int BTYPE_COUNT         = 3;
 
     public static final String BTYPE_NAMES[] = {
-        "rac+", "rac-",
+        "rac+", "rac-", "magn",
     };
 
     private static final float GRAVITY = 0.1f;
@@ -93,6 +94,9 @@ public class Bonus extends Sprite {
             break;
         case BTYPE_DEC_RACKET:
             getGameState().getRacket().changeSize(-1);
+            break;
+        case BTYPE_MAGNET:
+            getGameState().getRacket().setMagnet(true);
             break;
         default:
             System.err.println("Unknown bonus type: " + mBonusType);

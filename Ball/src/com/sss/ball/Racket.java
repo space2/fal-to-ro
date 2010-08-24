@@ -13,6 +13,9 @@ public class Racket extends Sprite {
 
     private int mSize;
 
+    /** When set to true, the ball will stick to the racket */
+    private boolean mMagnet = false;
+
     public Racket(GameState gameState) {
         super(TYPE_RACKET, gameState);
 
@@ -109,6 +112,14 @@ public class Racket extends Sprite {
         float speed = 300;
         ball.setVX((float) (-Math.sin(alpha) * speed));
         ball.setVY((float) (-Math.cos(alpha) * speed));
+        // Check if sticky
+        if (mMagnet) {
+            ball.setState(Ball.STATE_IDLE);
+        }
+    }
+
+    public void setMagnet(boolean b) {
+        mMagnet = b;
     }
 
 }

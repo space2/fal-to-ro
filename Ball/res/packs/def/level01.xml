@@ -19,6 +19,6 @@
 		<row bricks=".XXXX..XXXX."/>
 	</builder>
 	<logic type="BonusLogic">
-		<rule chance="20" types="rac+,rac-"/>
+		<rule chance="20" types="rac+,rac-,magn"/>
 	</logic>
 </level>
