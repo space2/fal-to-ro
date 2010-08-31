@@ -7,6 +7,8 @@ import java.io.InputStream;
 public class Util {
 
     private static Util dummy = new Util();
+
+    private static final long mBootTime = System.currentTimeMillis();
     private Util() {}
 
     public static int parseColor(String color) {
@@ -36,6 +38,10 @@ public class Util {
             }
         }
         return is;
+    }
+
+    public static int getUpTime() {
+        return (int) (System.currentTimeMillis() - mBootTime);
     }
 
 }

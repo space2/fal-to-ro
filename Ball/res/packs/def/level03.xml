@@ -13,4 +13,7 @@
         <mapping color="#ff0000" type="2"/>
         <mapping color="#7f7f7f" type="5" class="MultiHitBrick"/>
 	</builder>
+    <logic type="BonusLogic">
+        <rule chance="20" types="rac+,rac-,magn"/>
+    </logic>
 </level>

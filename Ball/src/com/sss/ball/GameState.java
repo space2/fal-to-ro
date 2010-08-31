@@ -17,6 +17,16 @@ public class GameState extends State {
     private static final float DIGIT_WIDTH = 48;
     private static final float DIGIT_HEIGHT = 64;
 
+    private static final int GS_INIT = 0;
+    private static final int GS_PLAY = 1;
+    private static final int GS_LOST_BALL = 2;
+    private static final int GS_LOST_GAME = 3;
+    private static final int GS_ABOUT_TO_PLAY = 4;
+
+    private static final String[] MSG_GAME_LOST = null;
+
+    private static final int DEF_LIVES = 4;
+
     private int mTexBalls;
     private int mTexBonuses;
     private int mTexBricks;
@@ -31,7 +41,11 @@ public class GameState extends State {
     private LevelLoader mLevelLoader = new LevelLoader(this);
     private Background mBg;
     private int mScore = 0;
-    private int mLives = 4 + 1;
+    private int mLives = 0;
+
+    private int mState = GS_INIT;
+    private int mStateTime = 0;
+    private int mLevel;
 
     public GameState() {
         super(STATE_GAME);
@@ -46,17 +60,47 @@ public class GameState extends State {
         mTexDigits = TextureUtil.loadTexture("/gfx/digits.png");
         mTexRackets = TextureUtil.loadTexture("/gfx/rackets.png");
 
-        loadLevel("/packs/def/level01.xml");
+        startGame();
+    }
+
+    private void startGame() {
+        // Reset game parameters
+        mScore = 0;
+        mLevel = 1;
+        mLives = DEF_LIVES + 1;
+
+        // Load the level
+        loadLevel();
+    }
+
+    private void loadLevel() {
+        // Build up the path to the level file
+        String levelFile = "/packs/" + getGamePack() + "/level" + String.format("%02d", mLevel) + ".xml";
+        loadLevel(levelFile);
+    }
+
+    private String getGamePack() {
+        // TODO: implement selecting of game packs
+        return "def";
     }
 
     private void loadLevel(String name) {
-        // TODO: clean the scene
+        // clean the scene
         resetLevel();
 
         // Load new level using level loader
-        if (!mLevelLoader.load(name)) {
+        if (mLevelLoader.load(name)) {
+            // Loaded successfully, so start playing
+            setState(GS_ABOUT_TO_PLAY);
+        } else {
+            // TODO: probably no more levels
             System.out.println("! Failed to load level: " + name);
         }
+    }
+
+    private void setState(int newState) {
+        mState = newState;
+        mStateTime = Util.getUpTime();
     }
 
     /**
@@ -85,6 +129,7 @@ public class GameState extends State {
         if (mLives > 0) {
             addNewBall();
         }
+        setState(GS_PLAY);
     }
 
     private void removeAllBalls() {
@@ -107,6 +152,24 @@ public class GameState extends State {
     @Override
     public void handleEvents() {
         super.handleEvents();
+
+        switch (mState) {
+        case GS_INIT:
+            // NOP
+            break;
+        case GS_PLAY:
+            handleEventsInPlay();
+            break;
+        case GS_LOST_GAME:
+            handleEventsInLostGame();
+            break;
+        case GS_ABOUT_TO_PLAY:
+            // NOP;
+            break;
+        }
+    }
+
+    private void handleEventsInPlay() {
         for (Sprite sprite : mSprites) {
             sprite.handleEvent();
         }
@@ -115,6 +178,14 @@ public class GameState extends State {
         if (Mouse.isButtonDown(0)) {
             // release balls
             releaseBalls();
+        }
+    }
+
+    private void handleEventsInLostGame() {
+        // Check for mouse click to restart playing
+        if (Mouse.isButtonDown(0)) {
+            // start next life
+            startGame();
         }
     }
 
@@ -128,6 +199,51 @@ public class GameState extends State {
     public void render() {
         super.render();
 
+        // Render the game itself
+        renderGame();
+
+        // Render the appropiate states as well
+        switch (mState) {
+        case GS_LOST_BALL:
+            // Nothing extra, just wait a bit
+            break;
+        case GS_LOST_GAME:
+            renderFade(false);
+            renderMsg(MSG_GAME_LOST);
+            break;
+        case GS_ABOUT_TO_PLAY:
+            if (renderFade(true)) {
+                setState(GS_PLAY);
+            }
+            break;
+        }
+    }
+
+    private void renderMsg(String msg[]) {
+        // TODO Auto-generated method stub
+    }
+
+    private boolean renderFade(boolean in) {
+        boolean ret = false;
+
+        // calculate opacity from timer
+        float alpha = (Util.getUpTime() - mStateTime) * 1.0f / 1000;
+        if (alpha > 1.0f) {
+            alpha = 1.0f;
+            ret = true;
+        }
+        if (in) {
+            alpha = 1.0f - alpha;
+        }
+
+        // Now render a solid rectangle
+        int argb = ((int)(alpha * 128)) << 24;
+        G.drawRect(0, 0, GameController.PREFERRED_WIDTH, GameController.PREFERRED_HEIGHT, argb);
+
+        return ret;
+    }
+
+    private void renderGame() {
         // render game area background
         if (mBg == null) {
             G.drawRect(GAME_AREA_X, GAME_AREA_Y, GAME_AREA_W, GAME_AREA_H, 0xff000000);
@@ -191,11 +307,6 @@ public class GameState extends State {
     public void tick(int delta) {
         super.tick(delta);
 
-        // // This doesn't work, since the tick changes mSprites
-        // for (Sprite sprite : mSprites) {
-        //     sprite.tick(delta);
-        // }
-
         mRacket.tick(delta);
         for (int i = mBalls.size()-1; i >= 0; i--) {
             Ball ball = mBalls.get(i);
@@ -209,6 +320,19 @@ public class GameState extends State {
             bonus.tick(delta);
         }
 
+        switch (mState) {
+        case GS_LOST_BALL:
+            tickLostBall();
+            break;
+        }
+
+    }
+
+    private void tickLostBall() {
+        // After one second, start the next life
+        if (mStateTime > 1000) {
+            resetNewLife();
+        }
     }
 
     public int getTexBalls() {
@@ -253,7 +377,13 @@ public class GameState extends State {
     }
 
     private void onLifeLost() {
-        resetNewLife();
+        if (mLives == 1) {
+            // Lost the last life
+            setState(GS_LOST_GAME);
+        } else {
+            // There are still some lives left
+            setState(GS_LOST_BALL);
+        }
     }
 
     private void addNewBall() {
