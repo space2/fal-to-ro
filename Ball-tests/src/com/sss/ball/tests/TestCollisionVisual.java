@@ -166,6 +166,8 @@ public class TestCollisionVisual extends VisualTestCase {
         mBall.setY(y);
         mBall.setVX(vx);
         mBall.setVY(vy);
+        mBall.setWidth(32);
+        mBall.setHeight(32);
         mBall.setState(Ball.STATE_MOVING);
     }
 

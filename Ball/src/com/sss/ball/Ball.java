@@ -5,7 +5,7 @@ public class Ball extends Sprite {
     public static final int STATE_IDLE = 0;
     public static final int STATE_MOVING = 1;
 
-    private static final float BALL_SIZE = 32;
+    private static final float BALL_SIZE = 16;
 
     private int mState = STATE_IDLE;
     private float mVX;
@@ -67,7 +67,9 @@ public class Ball extends Sprite {
         float nx = getX() + mVX * delta / 1000.0f;
         float ny = getY() + mVY * delta / 1000.0f;
 
-        CollisionUtil.setupBall(nx + BALL_SIZE/2, ny + BALL_SIZE/2, BALL_SIZE/2, mVX, mVY);
+        final float size = getWidth();
+
+        CollisionUtil.setupBall(nx + size/2, ny + size/2, size/2, mVX, mVY);
 
         CollisionUtil.doCollisionInBox(0, 0, GameState.GAME_AREA_W, GameState.GAME_AREA_H, CollisionUtil.EDGES_TOP_LEFT_RIGHT);
 
@@ -87,7 +89,7 @@ public class Ball extends Sprite {
         float nvx = CollisionUtil.getNewVX();
         float nvy = CollisionUtil.getNewVY();
 
-        if (ny > GameState.RACKET_Y + BALL_SIZE/2) {
+        if (ny > GameState.RACKET_Y + size/2) {
             // Too late to hit back, ball lost
             getGameState().onBallLost(this);
             return;
@@ -97,12 +99,12 @@ public class Ball extends Sprite {
         Racket r = getGameState().getRacket();
 
         // check collision with racket
-        if (ny > GameState.RACKET_Y - BALL_SIZE/2) {
+        if (ny > GameState.RACKET_Y - size/2) {
             if (nx >= r.getX()&& nx < r.getX() + r.getWidth()) {
                 // succesfull bounce
                 hitRacket = true;
                 // adjust Y position
-                ny = GameState.RACKET_Y - BALL_SIZE/2;
+                ny = GameState.RACKET_Y - size/2;
                 // do simple bouncing
                 if (nvy > 0) {
                     nvy = -nvy;
@@ -111,8 +113,8 @@ public class Ball extends Sprite {
         }
 
         // set new position
-        setX(nx - BALL_SIZE/2);
-        setY(ny - BALL_SIZE/2);
+        setX(nx - size/2);
+        setY(ny - size/2);
         setVX(nvx);
         setVY(nvy);
 
@@ -124,8 +126,8 @@ public class Ball extends Sprite {
 
     public void initPos(Racket r) {
         // center it on the racket
-        setY(r.getY() - BALL_SIZE);
-        setX(r.getX() + (r.getWidth() - BALL_SIZE) / 2);
+        setY(r.getY() - getHeight());
+        setX(r.getX() + (r.getWidth() - getWidth()) / 2);
     }
 
     public void setVX(float vx) {
