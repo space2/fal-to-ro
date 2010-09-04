@@ -7,9 +7,13 @@ public class Ball extends Sprite {
 
     private static final float BALL_SIZE = 16;
 
+    private static final int HIST_SIZE = 8;
+
     private int mState = STATE_IDLE;
     private float mVX;
     private float mVY;
+    private float mXHist[] = new float[HIST_SIZE];
+    private float mYHist[] = new float[HIST_SIZE];
 
     public Ball(GameState gameState) {
         super(TYPE_BALL, gameState);
@@ -27,6 +31,19 @@ public class Ball extends Sprite {
     @Override
     public void render() {
         super.render();
+
+        if (mState == STATE_MOVING) {
+            float d = getWidth() / 2;
+            // render trail
+            for (int i = HIST_SIZE-1; i >= 0; i--) {
+                float alpha = (HIST_SIZE - i) * 0.5f / HIST_SIZE;
+                float size = (HIST_SIZE - i) * getWidth() / HIST_SIZE;
+                G.drawImage(getGameState().getTexBalls(),
+                        mXHist[i] + d - size/2, mYHist[i] + d - size/2,
+                        size, size, 0, 0, 32/64.0f, 32/64.0f,
+                        alpha);
+            }
+        }
         G.drawImage(getGameState().getTexBalls(), getX(), getY(), getWidth(), getHeight(), 0, 0, 32/64.0f, 32/64.0f);
     }
 
@@ -51,6 +68,12 @@ public class Ball extends Sprite {
         if (mState != STATE_IDLE) return;
 
         mState = STATE_MOVING;
+
+        for (int i = 0; i < HIST_SIZE; i++) {
+            mXHist[i] = getX();
+            mXHist[i] = getY();
+        }
+
     }
 
     public void setState(int newState) {
@@ -112,9 +135,23 @@ public class Ball extends Sprite {
             }
         }
 
+        // Adjust coordinate
+        nx -= size / 2;
+        ny -= size / 2;
+
+        // Shift the history if moved enough
+        if (Math.abs(nx - mXHist[0]) + Math.abs(ny - mYHist[0]) > 6) {
+            for (int i = HIST_SIZE-1; i > 0; i--) {
+                mXHist[i] = mXHist[i-1];
+                mYHist[i] = mYHist[i-1];
+            }
+            mXHist[0] = nx;
+            mYHist[0] = ny;
+        }
+
         // set new position
-        setX(nx - size/2);
-        setY(ny - size/2);
+        setX(nx);
+        setY(ny);
         setVX(nvx);
         setVY(nvy);
 
@@ -126,8 +163,14 @@ public class Ball extends Sprite {
 
     public void initPos(Racket r) {
         // center it on the racket
-        setY(r.getY() - getHeight());
-        setX(r.getX() + (r.getWidth() - getWidth()) / 2);
+        float x = r.getX() + (r.getWidth() - getWidth()) / 2;
+        float y = r.getY() - getHeight();
+        setY(y);
+        setX(x);
+        for (int i = 0; i < HIST_SIZE; i++) {
+            mXHist[i] = x;
+            mXHist[i] = y;
+        }
     }
 
     public void setVX(float vx) {
